@@ -1,0 +1,124 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-item no-lines color="primary">
+      <ion-title text-center>
+        5x7 และ ถังสูง
+      </ion-title>
+      <button ion-button item-end default color="info" (click)="openPage('EngineerPage')">
+        <ion-icon item-start>
+          <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+        </ion-icon>
+        <span>ระบบบันทึกอื่นๆ</span>
+      </button>
+    </ion-item>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding class="eng-scroll-main-content">
+  <!-- Top Card -->
+  <ion-card>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-5>
+            <ion-item>
+              <ion-label fixed>เลือกวันที่</ion-label>
+              <ion-datetime (ionChange)="getRecords()" displayFormat="DD/MM/YYYY" [(ngModel)]="date"></ion-datetime>
+              <button ion-button item-end default color="primary" (click)="getRecords()">ค้นหา</button>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <button ion-button item-end default color="primary" (click)="addRecord()">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                เพิ่มการบันทึก
+              </button>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <!-- Bottom Card -->
+  <ion-card>
+    <!-- --  Date -->
+    <ion-item no-lines text-center>
+      <ion-label class="text-large">สรุปการบันทึกวันที่ {{result_date | date:'d/M/yy'}}</ion-label>
+    </ion-item>
+    <!--  -- Table Result -->
+    <ion-list inset>
+      <!--  --  -- Table Header -->
+      <ion-item text-center class="table-header eng-scroll-header">
+        <!--  -- --  -- Round -->
+        <ion-label>รอบ</ion-label>
+        <!--  -- --  -- Real Time Record -->
+        <ion-label *ngIf="user?.type_id==user_types?.admin">เวลาบันทึกจริง</ion-label>
+        <!--  -- -- -- Level 5x7-->
+        <ion-label>Level 5x7
+          <p>(>30)</p>
+        </ion-label>
+        <!--  -- -- -- Level High Tank -->
+        <ion-label>Level ถังสูง
+          <p>(>20)</p>
+        </ion-label>
+        <ion-label>Pump</ion-label>
+        <!--  -- -- -- Button -->
+        <button item-start ion-button default clear disabled>แก้ไข</button>
+        <button item-end ion-button default clear disabled>ลบ</button>
+      </ion-item>
+      <!--  -- -- Table Content -->
+      <ion-scroll class="eng-scroll-content" scrollY="true">
+        <ion-card-content no-padding>
+          <!--  -- --  -- Yesterday Records-->
+          <ion-item *ngIf="yesterday_meter" text-center class="table-content">
+            <!-- -- -- -- --  Edit -->
+            <button disabled clear item-start ion-button default color="light">แก้ไข</button>
+            <!-- -- -- -- -- Zero Time Record -->
+            <ion-label>{{yesterday_meter?.zero_time_record}}</ion-label>
+            <!--  -- -- -- -- Real Time Records -->
+            <ion-label *ngIf="user?.type_id==user_types?.admin">{{yesterday_meter?.updated_at | date:'H:m d/M/yy'}}</ion-label>
+            <!-- -- -- -- -- Level _5x7 -->
+            <ion-label *ngIf="yesterday_meter?.level_5x7>30;else warningLevel5x7">{{yesterday_meter?.level_5x7}}</ion-label>
+            <ng-template #warningLevel5x7>
+              <ion-label color="danger">{{yesterday_meter?.level_5x7 || '-'}}</ion-label>
+            </ng-template>
+            <!-- -- -- -- -- Level High Tank -->
+            <ion-label *ngIf="yesterday_meter?.level_high_tank>20;else warningLevelHighTank">{{yesterday_meter?.level_high_tank}}</ion-label>
+            <ng-template #warningLevelHighTank>
+              <ion-label color="danger">{{yesterday_meter?.level_high_tank || '-'}}</ion-label>
+            </ng-template>
+            <!-- -- -- -- -- Pump -->
+            <ion-label>{{yesterday_meter?.pump || '-'}}</ion-label>
+            <button clear disabled item-end ion-button default color="light">ลบ</button>
+          </ion-item>
+          <!--  -- -- Today Records -->
+          <ion-item (click)="setHighlight(i)" [ngClass]="{'highlight':isHighlightVisible[i]}" *ngFor="let recorder of recorders; let i = index" text-center class="table-content">
+            <!-- -- -- -- -- Edit -->
+            <button item-start ion-button default color="warning" (click)="editRecord(recorder)">แก้ไข</button>
+            <!--  -- -- -- -- Time Record -->
+            <ion-label >{{recorder.time_record}}</ion-label>
+            <ion-label *ngIf="user?.type_id==user_types?.admin">{{recorder.updated_at | date:'H:m d/M/yy'}}</ion-label>
+            <!-- -- -- -- -- Level _5x7 -->
+            <ion-label *ngIf="recorder?.level_5x7>30;else warningLevel5x7">{{recorder?.level_5x7}}</ion-label>
+            <ng-template #warningLevel5x7>
+              <ion-label color="danger">{{recorder?.level_5x7 || '-'}}</ion-label>
+            </ng-template>
+            <!-- -- -- -- -- Level High Tank -->
+            <ion-label *ngIf="recorder?.level_high_tank>20;else warningLevelHighTank">{{recorder?.level_high_tank}}</ion-label>
+            <ng-template #warningLevelHighTank>
+              <ion-label color="danger">{{recorder?.level_high_tank || '-'}}</ion-label>
+            </ng-template>
+            <!-- -- -- -- -- Pump -->
+            <ion-label>{{recorder.pump || '-'}}</ion-label>
+            <button item-end ion-button default color="danger" (click)="deleteRecord(recorder)">ลบ</button>
+          </ion-item>
+        </ion-card-content>
+      </ion-scroll>
+    </ion-list>
+
+  </ion-card>
+</ion-content>

@@ -1,0 +1,404 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-item no-lines color="primary">
+      <ion-title text-center>
+        Boiler
+      </ion-title>
+      <button ion-button item-end default color="info" (click)="openPage('EngineerPage')">
+        <ion-icon item-start>
+          <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+        </ion-icon>
+        <span>ระบบบันทึกอื่นๆ</span>
+      </button>
+    </ion-item>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding class="eng-scroll-main-content">
+  <!-- Top Card -->
+  <ion-card>
+    <ion-card-content>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-5>
+            <ion-item>
+              <ion-label fixed>เลือกวันที่</ion-label>
+              <ion-datetime (ionChange)="getRecords()" displayFormat="DD/MM/YYYY" [(ngModel)]="date"></ion-datetime>
+              <button ion-button item-end default color="primary" (click)="getRecords()">ค้นหา</button>
+            </ion-item>
+          </ion-col>
+          <ion-col>
+            <ion-item>
+              <button ion-button item-end default color="primary" (click)="addRecord(1)">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                เพิ่มการบันทึก Boiler 1
+              </button>
+              <button ion-button item-end default color="info" (click)="addRecord(2)">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                เพิ่มการบันทึก Boiler 2
+              </button>
+            </ion-item>
+            <ion-item>
+              <button ion-button item-end default color="warning" (click)="addGlobalDetails()">
+                <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                เพิ่มรายละเอียดอื่นๆ
+              </button>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>
+  <ion-grid>
+    <ion-row class="c-result">
+      <ion-col col-12>
+          <ion-item>
+              <ion-label>การใช้งาน FEED WATER METER ใน 1 วัน</ion-label>
+            </ion-item>
+      </ion-col>
+      <!-- Feed water meter boiler 1 -->
+      <ion-col col-4>
+          <ion-card>
+            <ion-card-content>
+              <div>
+                <h3 ion-text color="primary">FEED WATER METER BOILER 1</h3>
+                <div class="c-result-dark-blue" ion-text text-right>
+                  <h1 ion-text color="dark-blue">{{all_results?.global_details_used?.fw_boiler_1_used| number:'1.2-2'}}</h1>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+         <!-- Feed water meter boiler 2 -->
+      <ion-col col-4>
+          <ion-card>
+            <ion-card-content>
+              <div>
+                <h3 ion-text color="primary">FEED WATER METER BOILER 2</h3>
+                <div class="c-result-dark-blue" ion-text text-right>
+                  <h1 ion-text color="dark-blue">{{all_results?.global_details_used?.fw_boiler_2_used| number:'1.2-2'}}</h1>
+                </div>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+    </ion-row>
+    <!-- Water Oil Used -->
+    <ion-row class="c-result">
+      <ion-col col-12>
+        <ion-item>
+          <ion-label>การใช้งานมิเตอร์น้ำมันเตา และ มิเตอร์น้ำ ใน 1 วัน 
+              <span *ngIf='all_results?.global_details?.water_oil_start_time' ion-text color="gray">{{all_results?.global_details?.water_oil_start_time | slice:0:5}} ถึง {{all_results?.global_details?.water_oil_end_time
+                  | slice:0:5}}</span>
+          </ion-label>
+        </ion-item>
+      </ion-col>
+      <!-- Water Oil Time Used -->
+      <ion-col col-3>
+        <ion-card>
+          <ion-card-content>
+            <div>
+              <h3 ion-text color="primary">เวลาที่ใช้
+              </h3>
+              <div class="c-result-dark-blue" ion-text text-right>
+                <h1 ion-text color="dark-blue">{{all_results?.global_details_used?.water_oil_used_time| number}}
+                  <span *ngIf='all_results?.global_details_used?.water_oil_used_time'>ชม.</span>
+                </h1>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <!-- Water Meter Used -->
+      <ion-col col-3>
+        <ion-card>
+          <ion-card-content>
+            <div>
+              <h3 ion-text color="primary">มิเตอร์น้ำมันเตา</h3>
+              <div class="c-result-dark-blue" ion-text text-right>
+                <h1 ion-text color="dark-blue">{{all_results?.global_details_used?.water_meter_used| number}}</h1>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <!-- Oil Meter Used -->
+      <ion-col col-3>
+        <ion-card>
+          <ion-card-content>
+            <div>
+              <h3 ion-text color="primary">มิเตอร์น้ำ</h3>
+              <div class="c-result-dark-blue" ion-text text-right>
+                <h1 ion-text color="dark-blue">{{all_results?.global_details_used?.oil_meter_used| number}}</h1>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <!-- Blow Down -->
+    <ion-row *ngIf='all_results?.global_details?.blow_down_number' class="c-result">
+      <ion-col col-12>
+        <ion-item>
+          <ion-label>BLOW DOWN</ion-label>
+        </ion-item>
+      </ion-col>
+      <!-- Blow Down Time -->
+      <ion-col col-3>
+        <ion-card>
+          <ion-card-content>
+            <div>
+              <h3 ion-text color="primary">วันละ</h3>
+              <div class="c-result-dark-blue" ion-text text-right>
+                <h1 ion-text color="dark-blue">{{all_results?.global_details?.blow_down_number| number}}
+                  <span *ngIf='all_results?.global_details_used?.water_oil_used_time'>ครั้งละ {{all_results?.global_details?.blow_down_sec}} วินาที
+                  </span>
+                </h1>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <!-- Blow Down 1 Time-->
+      <ion-col *ngIf='all_results?.global_details?.blow_down_1_time' col-3>
+        <ion-card>
+          <ion-card-content>
+            <div>
+              <h3 ion-text color="primary">ครั้งที่ 1 เวลา</h3>
+              <div class="c-result-dark-blue" ion-text text-right>
+                <h1 ion-text color="dark-blue">{{all_results?.global_details?.blow_down_1_time | slice:0:5}} น.</h1>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <!-- Blow Down 2 Time-->
+      <ion-col *ngIf='all_results?.global_details?.blow_down_2_time' col-3>
+        <ion-card>
+          <ion-card-content>
+            <div>
+              <h3 ion-text color="primary">ครั้งที่ 2 เวลา</h3>
+              <div class="c-result-dark-blue" ion-text text-right>
+                <h1 ion-text color="dark-blue">{{all_results?.global_details?.blow_down_2_time | slice:0:5}} น.</h1>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+
+    </ion-row>
+    <!-- Safety Vale -->
+    <ion-row *ngIf='all_results?.global_details?.safety_vale_time' class="c-result">
+      <ion-col col-12>
+        <ion-item>
+          <ion-label>SAFETY VALE</ion-label>
+        </ion-item>
+      </ion-col>
+      <!-- Blow Down Time -->
+      <ion-col col-3>
+        <ion-card>
+          <ion-card-content>
+            <div>
+              <h3 ion-text color="primary">ตรวจสอบเวลา</h3>
+              <div class="c-result-dark-blue" ion-text text-right>
+                <h1 ion-text color="dark-blue">{{all_results?.global_details?.safety_vale_time | slice:0:5}} น.
+                </h1>
+              </div>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-card padding>
+    <ion-segment (ionChange)="setBoiler()" [(ngModel)]="groupTab" name="groupTab">
+      <ion-segment-button value="boiler_1">BOILER 1</ion-segment-button>
+      <ion-segment-button value="boiler_2">BOILER 2</ion-segment-button>
+    </ion-segment>
+  </ion-card>
+  <!-- Bottom Card -->
+  <ion-card>
+    <!-- Date -->
+    <ion-item no-lines text-center>
+      <ion-label class="text-large">สรุปการบันทึกวันที่ {{result_date | date:'d/M/yy'}}</ion-label>
+    </ion-item>
+    <!-- Table Result -->
+    <!-- Table Header -->
+    <ion-list inset>
+      <ion-item text-center class="table-header eng-scroll-header scroll-header">
+        <!-- --Time 10 -->
+        <div item-content class="group-header-10">
+          <h2></h2>
+          <div class="group-header-content">
+            <ion-label>รอบ</ion-label>
+          </div>
+        </div>
+        <!-- --Real Time Record 10-->
+        <div *ngIf="user?.type_id==user_types?.admin" item-content class="group-header-10">
+          <h2></h2>
+          <div class="group-header-content">
+            <ion-label>เวลาบันทึกจริง</ion-label>
+          </div>
+        </div>
+        <!-- --Steam Press 12-->
+        <div text-center item-content class="group-header-12">
+          <h2>STEAM PRESS</h2>
+          <div class="group-header-content">
+            <ion-label>DIGITAL
+              <p>(
+                <=7.0)</p>
+            </ion-label>
+            <ion-label>HEADER
+              <p>(
+                <=7.0)</p>
+            </ion-label>
+          </div>
+        </div>
+        <!-- --OP.Hour 12-->
+        <div text-center item-content class="group-header-12">
+          <h2>OP.HOUR</h2>
+          <div class="group-header-content">
+            <ion-label>BURNER
+              <p>-</p>
+            </ion-label>
+          </div>
+        </div>
+        <!-- --FEED WATER  12-->
+        <div text-center item-content class="group-header-12">
+          <h2>FEED WATER</h2>
+          <div class="group-header-content">
+            <ion-label>METER
+              <p>-</p>
+            </ion-label>
+            <ion-label>TANK L.
+              <p>(>500 Lts.)</p>
+            </ion-label>
+          </div>
+        </div>
+        <!-- --CHEMICAL LEVEL 12-->
+        <div text-center item-content class="group-header-12">
+          <h2>CHEMICAL LEVEL</h2>
+          <div class="group-header-content">
+            <ion-label>TANK 1
+              <p>(>20 Lts.)</p>
+            </ion-label>
+            <ion-label>TANK 2
+              <p>(>20 Lts.)</p>
+            </ion-label>
+          </div>
+        </div>
+        <!-- --OIL TANK 12-->
+        <div text-center item-content class="group-header-12">
+          <h2>OIL TANK</h2>
+          <div class="group-header-content">
+            <ion-label>LEVEL
+              <p>(>250 Lts.)</p>
+            </ion-label>
+          </div>
+        </div>
+        <!-- --STACK T. 12-->
+        <div text-center item-content class="group-header-12">
+          <h2>STACK T.</h2>
+          <div class="group-header-content">
+            <ion-label>DIGITAL
+              <p>(180 - 200°C)</p>
+            </ion-label>
+          </div>
+        </div>
+        <!-- --REAMARKS 20-->
+        <div text-center item-content class="group-header-20">
+          <h2>REMARKS</h2>
+          <div class="group-header-content">
+            <ion-label>
+              <p>(ALARM ทุกครั้ง,สาเหตุ,วิธีแก้ไข)</p>
+            </ion-label>
+          </div>
+        </div>
+        <button item-start ion-button default clear disabled>แก้ไข</button>
+        <button item-end ion-button default clear disabled>ลบ</button>
+      </ion-item>
+      <ion-scroll class="eng-scroll-content scroll" scrollY="true" scrollX="true">
+        <ion-card-content no-padding>
+          <!-- Table Result -->
+          <!-- Today Result -->
+          <ion-item (click)="setHighlight(i)" [ngClass]="{'highlight':isHighlightVisible[i]}" *ngFor="let recorder of recorders; let i=index"
+            text-center class="table-content">
+            <!-- --Time 10 -->
+            <div item-content class="group-header-10">
+              <h2></h2>
+              <div class="group-header-content">
+                <ion-label>{{recorder.time_record}}</ion-label>
+              </div>
+            </div>
+            <!-- --Real Time Record 10-->
+            <div *ngIf="user?.type_id==user_types?.admin" item-content class="group-header-10">
+              <h2></h2>
+              <div class="group-header-content">
+                <ion-label>{{recorder.details?.updated_at | date:'H:m d/M/yy'}}</ion-label>
+              </div>
+            </div>
+            <!-- --Steam Press 12-->
+            <div text-center item-content class="group-header-12">
+              <h2></h2>
+              <div class="group-header-content">
+                <ion-label>{{recorder.details?.sp_digital}}</ion-label>
+                <ion-label>{{recorder.details?.sp_header}}</ion-label>
+              </div>
+            </div>
+            <!-- --OP.Hour 12-->
+            <div text-center item-content class="group-header-12">
+              <h2></h2>
+              <div class="group-header-content">
+                <ion-label>{{recorder.details?.oph_burner}}</ion-label>
+              </div>
+            </div>
+            <!-- --FEED WATER  12-->
+            <div text-center item-content class="group-header-12">
+              <h2></h2>
+              <div class="group-header-content">
+                <ion-label>{{recorder.details?.fw_meter}}</ion-label>
+                <ion-label>{{recorder.details?.fw_tank_l}}</ion-label>
+              </div>
+            </div>
+            <!-- --CHEMICAL LEVEL 12-->
+            <div text-center item-content class="group-header-12">
+              <h2></h2>
+              <div class="group-header-content">
+                <ion-label>{{recorder.details?.cl_tank_1}}</ion-label>
+                <ion-label>{{recorder.details?.cl_tank_2}}</ion-label>
+              </div>
+            </div>
+            <!-- --OIL TANK 12-->
+            <div text-center item-content class="group-header-12">
+              <h2></h2>
+              <div class="group-header-content">
+                <ion-label>{{recorder.ot_level}}</ion-label>
+              </div>
+            </div>
+            <!-- --STACK T. 12-->
+            <div text-center item-content class="group-header-12">
+              <h2></h2>
+              <div class="group-header-content">
+                <ion-label>{{recorder.details?.st_digital}} </ion-label>
+              </div>
+            </div>
+            <!-- --REAMRKS 20-->
+            <div text-center item-content class="group-header-20">
+              <h2></h2>
+              <div class="group-header-content">
+                <ion-label>{{recorder.details?.remarks}}</ion-label>
+              </div>
+            </div>
+            <button item-start ion-button default color="warning" (click)="editRecord(recorder)">แก้ไข</button>
+            <button item-end ion-button default color="danger" (click)="deleteRecord(recorder)">ลบ</button>
+          </ion-item>
+        </ion-card-content>
+      </ion-scroll>
+    </ion-list>
+  </ion-card>
+</ion-content>

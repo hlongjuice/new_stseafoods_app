@@ -1,0 +1,144 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-item no-lines>
+      <button ion-button item-start default color="danger" (click)="dismiss()">ปิด</button>
+      <ion-title>รายการอื่นๆ</ion-title>
+      <button [disabled]="!formInputs.form.valid" ion-button item-end default color="success" (click)="addRecord(formInputs.value,formInputs)">บันทึก</button>
+    </ion-item>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <form #formInputs="ngForm">
+    <ion-grid>
+      <!-- DAte -->
+      <ion-row align-items-end>
+        <!-- Date-->
+        <ion-col col-6 offset-6>
+          <ion-item>
+            <ion-label color="primary">วันที่</ion-label>
+            <ion-datetime  required displayFormat="DD/MM/YYYY" name="date" [(ngModel)]="recorder.date"></ion-datetime>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <!--Water Oil Start -->
+      <ion-row align-items-end>
+        <ion-col col-12>
+          <ion-item>
+            <ion-label>เริ่ม</ion-label>
+          </ion-item>
+        </ion-col>
+        <!-- Start Time -->
+        <ion-col offset-6 col-6 pull-6>
+          <ion-item>
+            <ion-label color="primary">เวลาเริ่ม</ion-label>
+            <ion-datetime  displayFormat="HH:mm" name="water_oil_start_time" [(ngModel)]="recorder.water_oil_start_time"></ion-datetime>
+          </ion-item>
+        </ion-col>
+        <!-- OIL Meter-->
+        <ion-col col-6>
+          <ion-item>
+            <ion-label color="primary">มิเตอร์น้ำมันเตา</ion-label>
+            <ion-input type="number" name="oil_meter_start" [(ngModel)]="recorder.oil_meter_start"></ion-input>
+          </ion-item>
+        </ion-col>
+        <!-- Water Meter-->
+        <ion-col col-6>
+          <ion-item>
+            <ion-label color="primary">มิเตอร์น้ำ</ion-label>
+            <ion-input type="number" name="water_meter_start" [(ngModel)]="recorder.water_meter_start"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <!-- Water Oil End -->
+      <ion-row align-items-end>
+        <ion-col col-12>
+          <ion-item>
+            <ion-label>หยุด</ion-label>
+          </ion-item>
+        </ion-col>
+        <!-- End Time -->
+        <ion-col offset-6 col-6 pull-6>
+          <ion-item>
+            <ion-label color="primary">เวลาหยุด</ion-label>
+            <ion-datetime  displayFormat="HH:mm" name="water_oil_end_time" [(ngModel)]="recorder.water_oil_end_time"></ion-datetime>
+          </ion-item>
+        </ion-col>
+        <!-- OIL Meter-->
+        <ion-col col-6>
+          <ion-item>
+            <ion-label color="primary">มิเตอร์น้ำมันเตา</ion-label>
+            <ion-input type="number" name="oil_meter_end" [(ngModel)]="recorder.oil_meter_end"></ion-input>
+          </ion-item>
+        </ion-col>
+        <!-- Water Meter-->
+        <ion-col col-6>
+          <ion-item>
+            <ion-label color="primary">มิเตอร์น้ำ</ion-label>
+            <ion-input type="number" name="water_meter_end" [(ngModel)]="recorder.water_meter_end"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <!-- Blow Down -->
+      <ion-row align-items-end>
+        <ion-col col-12>
+          <ion-item>
+            <ion-label>BLOW DOWN</ion-label>
+          </ion-item>
+        </ion-col>
+        <!-- Blow Down Number -->
+        <ion-col col-6>
+          <ion-item>
+            <ion-label color="primary">วันละ</ion-label>
+            <ion-input type="number" name="blow_down_number" [(ngModel)]="recorder.blow_down_number"></ion-input>
+            <div ion-text item-end>ครั้ง</div>
+          </ion-item>
+        </ion-col>
+        <!-- Blow Down Sewc-->
+        <ion-col col-6>
+          <ion-item>
+            <ion-label color="primary">ครั้งละ</ion-label>
+            <ion-input type="number" name="blow_down_sec" [(ngModel)]="recorder.blow_down_sec"></ion-input>
+            <div ion-text item-end>วินาที</div>
+          </ion-item>
+        </ion-col>
+        <!-- Blow Down 1 Time-->
+        <ion-col col-6>
+          <ion-item>
+            <ion-label color="primary">ครั้งที่ 1 เวลา</ion-label>
+            <ion-datetime  displayFormat="HH:mm" name="blow_down_1_time" [(ngModel)]="recorder.blow_down_1_time"></ion-datetime>
+            <div ion-text item-end>น.</div>
+          </ion-item>
+        </ion-col>
+        <!-- Blow Down / Time-->
+        <ion-col col-6>
+          <ion-item>
+            <ion-label color="primary">ครั้งที่ 2 เวลา</ion-label>
+            <ion-datetime  displayFormat="HH:mm" name="blow_down_2_time" [(ngModel)]="recorder.blow_down_2_time"></ion-datetime>
+            <div ion-text item-end>น.</div>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <!-- SAFETY VALE -->
+      <ion-row align-items-end>
+        <ion-col col-12>
+          <ion-item>
+            <ion-label>SAFETY VALE</ion-label>
+          </ion-item>
+        </ion-col>
+        <!-- SAFETY VALE TIME -->
+        <ion-col col-6>
+          <ion-item>
+            <ion-label color="primary">ตรวจสอบเวลา</ion-label>
+            <ion-datetime  displayFormat="HH:mm" name="safety_vale_time" [(ngModel)]="recorder.safety_vale_time"></ion-datetime>
+            <div ion-text item-end>น.</div>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+
+</ion-content>

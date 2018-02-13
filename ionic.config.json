@@ -1,0 +1,8 @@
+{
+  "name": "new_stseafoods",
+  "app_id": "",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
