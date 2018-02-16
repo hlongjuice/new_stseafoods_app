@@ -35,29 +35,35 @@ export class QcRecorderResultPage {
   total_result_shrimp_soft: any;
   total_result_shrimp_soft_percent: any;
   total_result_shrimp_weight: any;
+  total_result_shrimp_dead: any;
   total_result_shrimp_dead_percent: any;
+  total_result_last_five_shrimp_dead: any;
   total_result_last_five_shrimp_dead_percent: any;
   total_result_total_shrimp_dead_percent: any;
   /* Yearly Result */
   year_receivings: any;
   month_names: string[];
   year_headers: number[];
-  yt_result_shrimp_dead_percents: number[];
+  yt_result_shrimp_dead_percents: any[];
   result_card_colors: any[];
   /* By Supplier Result */
   s_results: any;
   s_total_result_shrimp_weight: any;
+  s_total_result_shrimp_dead: any;
   s_total_result_shrimp_dead_percent: any;
+  s_total_result_last_five_shrimp_dead: any;
   s_total_result_last_five_shrimp_dead_percent: any;
+  s_total_result_total_shrimp_dead: any;
   s_total_result_total_shrimp_dead_percent: any;
+  s_total_result_shrimp_soft: any;
   s_total_result_shrimp_soft_percent: any;
-  s_start_month:any;
-  s_end_month:any;
+  s_start_month: any;
+  s_end_month: any;
   quarter: string;
 
 
   /* Update  */
-  yearly_all_months_result:any[];
+  yearly_all_months_result: any[];
 
 
   constructor(
@@ -73,7 +79,7 @@ export class QcRecorderResultPage {
   }
 
   ngOnInit() {
-    this.yearly_all_months_result=[];
+    this.yearly_all_months_result = [];
     // this.inMonth='test';
     this.result_card_colors = [
       {
@@ -99,46 +105,9 @@ export class QcRecorderResultPage {
     this.month = this.dateService.getCurrentDateTime().MM;
     this.year = this.dateService.getCurrentDateTime().YY;
     this.date = this.dateService.getDate();
-    this.s_start_month=this.dateService.getDate();
-    this.s_end_month=this.dateService.getDate();
-    this.qcShrimpResultService.getMonthlyResult(this.year, this.month)
-      .then(result => {
-        for (let i = parseInt(this.year) - 2; i <= parseInt(this.year); i++) {
-          this.year_headers.push(i);
-        }
-        console.log(result)
-        this.m_results = result;
-        //Calculate Total Result
-        //Shrimp Weight
-        this.total_result_shrimp_weight = this.m_results.reduce((sum, item) => {
-          return sum + item.total_shrimp_weight;
-        }, 0);
-        //Last Five Percent
-        this.total_result_last_five_shrimp_dead_percent = this.m_results.reduce((sum, item) => {
-          return sum + parseFloat(item.last_five_shrimp_dead_percent);
-        }, 0);
-        //Shrimp Dead Percent
-        this.total_result_shrimp_dead_percent = this.m_results.reduce((sum, item) => {
-          return sum + parseFloat(item.shrimp_dead_percent);
-        }, 0);
-        //Total Shrimp Dead Percent
-        this.total_result_total_shrimp_dead_percent = this.m_results.reduce((sum, item) => {
-          return sum + parseFloat(item.total_shrimp_dead_percent);
-        }, 0)
-        //Total Result Shrimp Soft
-        this.total_result_shrimp_soft_percent = (this.m_results.reduce((sum, item) => {
-          return sum + parseFloat(item.real_shrimp_soft_percent)
-        }, 0)).toFixed(2)
-        //Set 2 Digit
-        // console.log(this.total_result_last_five_shrimp_dead_percent,this.total_result_shrimp_dead_percent)
-        //this.total_result_shrimp_soft_percent
-        this.total_result_last_five_shrimp_dead_percent = this.total_result_last_five_shrimp_dead_percent.toFixed(2)
-        this.total_result_shrimp_dead_percent = this.total_result_shrimp_dead_percent.toFixed(2)
-        this.total_result_total_shrimp_dead_percent = this.total_result_total_shrimp_dead_percent.toFixed(2)
-
-
-      }).catch(err => { console.log(err) })
-
+    this.s_start_month = this.dateService.getDate();
+    this.s_end_month = this.dateService.getDate();
+    this.getMonthlyReceiving();
   }
 
   setHighlight(i) {
@@ -168,72 +137,105 @@ export class QcRecorderResultPage {
     console.log(this.month, this.year)
     this.qcShrimpResultService.getMonthlyResult(this.year, this.month)
       .then(result => {
+        for (let i = parseInt(this.year) - 2; i <= parseInt(this.year); i++) {
+          this.year_headers.push(i);
+        }
+        console.log(result)
         this.m_results = result;
+        console.log('Monthly Result : ', this.m_results);
         //Calculate Total Result
         //Shrimp Weight
         this.total_result_shrimp_weight = this.m_results.reduce((sum, item) => {
           return sum + item.total_shrimp_weight;
         }, 0);
+        //Last Five
+        this.total_result_last_five_shrimp_dead = this.m_results.reduce((sum, item) => {
+          return sum + parseFloat(item.last_five_shrimp_dead);
+        }, 0);
         //Last Five Percent
-        this.total_result_last_five_shrimp_dead_percent = this.m_results.reduce((sum, item) => {
-          return sum + parseFloat(item.last_five_shrimp_dead_percent);
+        this.total_result_last_five_shrimp_dead_percent =
+          this.total_result_last_five_shrimp_dead / this.total_result_shrimp_weight * 100;
+        //Shrimp Dead 
+        this.total_result_shrimp_dead = this.m_results.reduce((sum, item) => {
+          return sum + parseFloat(item.shrimp_dead);
         }, 0);
         //Shrimp Dead Percent
-        this.total_result_shrimp_dead_percent = this.m_results.reduce((sum, item) => {
-          return sum + parseFloat(item.shrimp_dead_percent);
-        }, 0);
+        this.total_result_shrimp_dead_percent = (this.total_result_shrimp_dead / this.total_result_shrimp_weight) * 100;
         //Total Shrimp Dead Percent
-        this.total_result_total_shrimp_dead_percent = this.m_results.reduce((sum, item) => {
-          return sum + parseFloat(item.total_shrimp_dead_percent);
-        }, 0)
+        this.total_result_total_shrimp_dead_percent = this.total_result_shrimp_dead_percent + this.total_result_last_five_shrimp_dead_percent
+        //Total Result Shrimp Soft
+        this.total_result_shrimp_soft = (this.m_results.reduce((sum, item) => {
+          if (item.real_shrimp_soft == null) {
+            item.real_shrimp_soft = 0
+          }
+          return sum + parseFloat(item.real_shrimp_soft)
+        }, 0));
+        //Total Result Shrimp Soft Percent
+        this.total_result_shrimp_soft_percent = ((this.total_result_shrimp_soft / this.total_result_shrimp_weight) * 100).toFixed(2)
+        console.log('Monthly shrimp soft : ', this.total_result_shrimp_soft);
+        console.log('total Weight :', this.total_result_shrimp_weight);
+        console.log('shrimp soft percent : ', this.total_result_shrimp_soft_percent);
         //Set 2 Digit
         // console.log(this.total_result_last_five_shrimp_dead_percent,this.total_result_shrimp_dead_percent)
+        //this.total_result_shrimp_soft_percent
         this.total_result_last_five_shrimp_dead_percent = this.total_result_last_five_shrimp_dead_percent.toFixed(2)
         this.total_result_shrimp_dead_percent = this.total_result_shrimp_dead_percent.toFixed(2)
         this.total_result_total_shrimp_dead_percent = this.total_result_total_shrimp_dead_percent.toFixed(2)
         this.dismissLoader();
 
-      }).catch(err => { console.log(err); this.dismissLoader(); })
+      }).catch(err => { console.log(err) })
   }
 
   getYearlyReceiving() {
+    //yt คือ year total result
+    this.yt_result_shrimp_dead_percents = [];
+    this.yearly_all_months_result = [];
     let date = new Date(this.date);
     this.month = (date.getMonth() + 1).toString();
     this.year = date.getFullYear().toString();
-    console.log(this.year);
     this.qcShrimpResultService.getYearlyResult(this.year)
       .then(result => {
-        console.log('Yo!!',result);
         this.year_receivings = result;
         this.year_receivings.forEach(year => {
-          console.log(year.data);
-          let result = year.data.reduce((sum, item) => { return sum + item.m_total_shrimp_dead_percent }, 0)
-          let avg = result / year.data.length
-          this.yt_result_shrimp_dead_percents.push(avg);
+          console.log('Year Data', year.data);
+          // 2 บรรทัดล่าง คำนวนโดยเอา % กุ้งตายรวมมาบวกกันแล้วหารด้วยจำนวนเดือน เป็นการหาค่าเฉลี่ย
+          // let result = year.data.reduce((sum, item) => { return sum + item.m_total_shrimp_dead_percent }, 0)
+          // let avg = result / year.data.length
+          let yt_result_shrimp_dead = year.data.reduce((sum, item) => {
+            return sum + item.m_total_shrimp_dead
+          }, 0)
+          let yt_result_shrimp_weight = year.data.reduce((sum, item) => {
+            return sum + item.m_total_shrimp_weight
+          }, 0)
+          //signle shrimp dead percent
+          let yt_result_shrimp_dead_percent = (yt_result_shrimp_dead / yt_result_shrimp_weight * 100).toFixed(2)
+
+          this.yt_result_shrimp_dead_percents.push(yt_result_shrimp_dead_percent);
 
           //Update 25-09-2017
-          let monthData=[];
+          let monthData = [];
           for (let i = 0; i < 12; i++) {
             monthData[i] = 0
           }
           year.data.forEach(month => {
             for (let i = 0; i < 12; i++) {
               if (month.month == i + 1) {
-                monthData[i] = parseFloat(month.m_total_shrimp_dead_percent)
+                // monthData[i] = parseFloat(month.m_total_shrimp_dead_percent)
+                monthData[i] = month.m_total_shrimp_dead_percent.toFixed(2)
                 i = 12;
               }
             }
           })
-          let allMonthData={
-            'year':year.year,
-            'data':monthData
+          let allMonthData = {
+            'year': year.year,
+            'data': monthData
           }
           this.yearly_all_months_result.push(allMonthData);
-          console.log('RRRR',this.yearly_all_months_result);
-          
+          console.log('This All Month Result', this.yearly_all_months_result);
+
         })
         // console.log(this.year_receivings)
-        console.log(this.yt_result_shrimp_dead_percents)
+        console.log('YT Result', this.yt_result_shrimp_dead_percents)
         this.drawChart();
 
       }).catch(err => { console.log(err) })
@@ -270,7 +272,7 @@ export class QcRecorderResultPage {
       dataChart.data = monthInit
       dataInput.push(dataChart);
     })
-    console.log(dataInput);
+    console.log('Draw Graph Data Input', dataInput);
     let ctx = this.el.nativeElement
     new Chart(ctx, {
       type: 'line',
@@ -353,13 +355,13 @@ export class QcRecorderResultPage {
   }
   /* By Quarter */
   getSupplierResultByMonthPeriod() {
-    let date_start=new Date(this.s_start_month);
-    let date_end=new Date(this.s_end_month);
+    let date_start = new Date(this.s_start_month);
+    let date_end = new Date(this.s_end_month);
     this.showLoader()
     this.s_results = null;
-    let start_month=(date_start.getMonth()+1).toString();
-    let end_month=(date_end.getMonth()+1).toString();
-    this.qcShrimpResultService.getSupplierResultByQuarter(this.supplier_id, this.year, start_month,end_month)
+    let start_month = (date_start.getMonth() + 1).toString();
+    let end_month = (date_end.getMonth() + 1).toString();
+    this.qcShrimpResultService.getSupplierResultByQuarter(this.supplier_id, this.year, start_month, end_month)
       .then(result => {
         this.s_results = result;
         this.calculateSupplierTotalResult(result)
@@ -373,27 +375,36 @@ export class QcRecorderResultPage {
     this.s_total_result_shrimp_weight = results.reduce((sum, item) => {
       return sum + item.total_shrimp_weight;
     }, 0);
-    //Last Five Percent
-    this.s_total_result_last_five_shrimp_dead_percent = results.reduce((sum, item) => {
-      return sum + parseFloat(item.last_five_shrimp_dead_percent);
+    //Last Five
+    this.s_total_result_last_five_shrimp_dead = results.reduce((sum, item) => {
+      return sum + parseFloat(item.last_five_shrimp_dead);
+    }, 0);
+    //Lasdt Five Percent
+    this.s_total_result_last_five_shrimp_dead_percent = this.s_total_result_last_five_shrimp_dead / this.s_total_result_shrimp_weight * 100;
+    //Shrimp Dead
+    this.s_total_result_shrimp_dead = results.reduce((sum, item) => {
+      return sum + parseFloat(item.shrimp_dead);
     }, 0);
     //Shrimp Dead Percent
-    this.s_total_result_shrimp_dead_percent = results.reduce((sum, item) => {
-      return sum + parseFloat(item.shrimp_dead_percent);
-    }, 0);
-    //Total Shrimp Dead Percent
-    this.s_total_result_total_shrimp_dead_percent = results.reduce((sum, item) => {
-      return sum + parseFloat(item.total_shrimp_dead_percent);
+    this.s_total_result_shrimp_dead_percent = this.s_total_result_shrimp_dead / this.s_total_result_shrimp_weight * 100;
+    //Total Shrimp Dead
+    this.s_total_result_total_shrimp_dead = results.reduce((sum, item) => {
+      return sum + parseFloat(item.total_shrimp_dead);
     }, 0)
+    //Total Shrimp Dead Percent
+    this.s_total_result_total_shrimp_dead_percent = this.s_total_result_total_shrimp_dead / this.s_total_result_shrimp_weight * 100
     //Total Result Shrimp Soft
-    this.s_total_result_shrimp_soft_percent = (results.reduce((sum, item) => {
-      return sum + parseFloat(item.real_shrimp_soft_percent)
-    }, 0)).toFixed(2)
+    this.s_total_result_shrimp_soft = (results.reduce((sum, item) => {
+      return sum + parseFloat(item.real_shrimp_soft)
+    }, 0))
+    //Total Result Shrimp Soft Percent
+    this.s_total_result_shrimp_soft_percent = this.s_total_result_shrimp_soft / this.s_total_result_shrimp_weight * 100;
     //Set 2 Digit
     // console.log(this.total_result_last_five_shrimp_dead_percent,this.total_result_shrimp_dead_percent)
     this.s_total_result_last_five_shrimp_dead_percent = this.s_total_result_last_five_shrimp_dead_percent.toFixed(2)
     this.s_total_result_shrimp_dead_percent = this.s_total_result_shrimp_dead_percent.toFixed(2)
     this.s_total_result_total_shrimp_dead_percent = this.s_total_result_total_shrimp_dead_percent.toFixed(2)
+    this.s_total_result_shrimp_soft_percent=this.s_total_result_shrimp_soft_percent.toFixed(2);
   }
 
   /* Reset Data*/
@@ -402,20 +413,26 @@ export class QcRecorderResultPage {
     this.s_results = null;
     this.date = this.dateService.getDate();
     this.total_result_shrimp_weight = 0;
+    this.total_result_shrimp_dead = 0;
     this.total_result_shrimp_dead_percent = 0;
+    this.total_result_last_five_shrimp_dead = 0;
     this.total_result_last_five_shrimp_dead_percent = 0;
     this.total_result_total_shrimp_dead_percent = 0;
-    this.total_result_shrimp_soft_percent=0;
-    this.total_result_shrimp_soft=0;
+    this.total_result_shrimp_soft_percent = 0;
+    this.total_result_shrimp_soft = 0;
     /* Yearly Result */
     this.year_receivings = 0;
     this.yt_result_shrimp_dead_percents = [];
     /* By Supplier Result */
     this.s_total_result_shrimp_weight = 0;
+    this.s_total_result_shrimp_dead = 0;
     this.s_total_result_shrimp_dead_percent = 0;
+    this.s_total_result_last_five_shrimp_dead = 0;
     this.s_total_result_last_five_shrimp_dead_percent = 0;
+    this.s_total_result_total_shrimp_dead = 0;
     this.s_total_result_total_shrimp_dead_percent = 0;
-    this.s_total_result_shrimp_soft_percent=0;
+    this.s_total_result_shrimp_soft = 0
+    this.s_total_result_shrimp_soft_percent = 0;
   }
 
   /* *******End Get By Supplier */

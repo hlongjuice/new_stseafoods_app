@@ -90,6 +90,7 @@ export class QcAddReceivingPage {
           this.isSubmit = true;
           this.dismissLoader()
           data.form.reset();
+          this.viewCtrl.dismiss(this.isSubmit);
           // this.viewCtrl.dismiss({'result':result,'submit':this.isSubmit})
           console.log(result)
           this.showToast('เพิ่มข้อมูลสำเร็จ')

@@ -8,8 +8,8 @@ export class WebUrlService{
     ){
         // this.url='http://www.ggeverything.com/public'; 
         // this.url='http://www.ggeverything.com';
-        this.url='http://192.168.43.241/stseafood/public';
-        // this.url='http://192.168.1.114/stseafood/public';
+        // this.url='http://192.168.43.241/stseafood/public';
+        this.url='http://192.168.1.114/stseafood/public';
         // this.url='http://192.168.1.104/stseafood/public';
         //Factory IP
         // this.url='http://192.168.2.13:8100/stseafood/public';
