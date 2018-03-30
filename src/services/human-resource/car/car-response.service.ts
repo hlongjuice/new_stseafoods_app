@@ -104,6 +104,7 @@ export class CarResponseService {
             'car_request_ids': requestIDList,
             'driver_id': driver_id
         }
+        console.log('Car Assgin Service input : ',assignDetails)
         let approveUrl = this.url + '/api/human_resource/car/car_response/assign_car';
         return new Promise((resolve, reject) => {
             this.http.post(approveUrl, assignDetails, { headers: this.headers })

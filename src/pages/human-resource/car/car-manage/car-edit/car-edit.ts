@@ -1,24 +1,25 @@
-import { NgForm } from '@angular/forms';
 import { CarManageService } from './../../../../../services/human-resource/car/car-manage.service';
-
-import { Component} from '@angular/core';
+import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, LoadingController, AlertController } from 'ionic-angular';
 
 /**
- * Generated class for the CarAddPage page.
+ * Generated class for the CarEditPage page.
  *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
  */
+
 @IonicPage()
 @Component({
-  selector: 'page-car-add',
-  templateUrl: 'car-add.html',
+  selector: 'page-car-edit',
+  templateUrl: 'car-edit.html',
 })
-export class CarAddPage {
+export class CarEditPage {
+
   quantity=0;
   carTypes: any[];
-  addStatus:boolean;
+  updateStatus:boolean;
+  car:any;
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     public viewCtrl:ViewController,
@@ -29,14 +30,16 @@ export class CarAddPage {
   }
 
   ngOnInit() {
-    this.addStatus=false;
+    this.car={};
+    this.updateStatus=false;
     this.carTypes = [];
     this.carTypes=this.navParams.data.carTypes;
-    console.log(this.navParams)
+    this.car=this.navParams.data.car;
+    console.log('NavParams',this.navParams)
   }
 
   /*Add Car*/
-  addCar(newCar:NgForm){
+  updateCar(newCar){
     let loader=this.loaderCtr.create({
       content:'กำลังอัพโหลด'
     })
@@ -45,13 +48,13 @@ export class CarAddPage {
     })
     loader.present();
     console.log(newCar.value)
-    this.carManageService.addCar(newCar.value.car_number,newCar.value.selectedCarType,
+    this.carManageService.updateCar(this.car.id,newCar.value.car_number,newCar.value.selectedCarType,
     newCar.value.plate_number)
     .then(
       result=>{
         loader.dismiss();
-        this.addStatus=true;
-        this.viewCtrl.dismiss(this.addStatus);
+        this.updateStatus=true;
+        this.viewCtrl.dismiss(this.updateStatus);
       }
     ).catch(
      err=>{
@@ -63,12 +66,11 @@ export class CarAddPage {
 
   /*Closed Modal*/
   closed(){
-    this.viewCtrl.dismiss(this.addStatus);
+    this.viewCtrl.dismiss(this.updateStatus);
   }
   /*Get Car Type*/
   getTypes(){
     if(this.carTypes.length<1){
-      console.log('yo!!');
       this.carManageService.getCarType()
       .then(result=>this.carTypes=result)
       .catch(err=>{console.log(err)})

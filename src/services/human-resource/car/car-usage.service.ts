@@ -67,4 +67,19 @@ export class CarUsageService {
             )
         })
     }
+    //Get Car Usage By Year
+    getByYear(car_id,year){
+        let inputs={
+            'car_id':car_id,
+            'year':year
+        }
+        let getByMonthUrl=this.url+'/api/human_resource/car/car_usage/get_by_year';
+        return new Promise((resolve,reject)=>{
+            this.http.post(getByMonthUrl,inputs,{headers:this.headers})
+            .subscribe(
+                result=>{resolve(result.json())},
+                err=>{reject(err)}
+            )
+        })
+    }
 }

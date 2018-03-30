@@ -11,7 +11,7 @@
       <ion-item>
         <ion-label>ประเภท</ion-label>
         <ion-select (click)="getTypes()" required name="selectedCarType" [(ngModel)]="selectedCarType">
-          <ion-option value=null>เลือกประเภทรถ</ion-option>
+          <!-- <ion-option value=null>เลือกประเภทรถ</ion-option> -->
           <ion-option *ngFor="let carType of carTypes" [value]="carType.id">{{carType.name}}</ion-option>
         </ion-select>
       </ion-item>

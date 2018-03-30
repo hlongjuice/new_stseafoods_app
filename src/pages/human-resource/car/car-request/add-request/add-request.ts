@@ -151,6 +151,9 @@ export class AddRequestPage {
 
   /* Add Request */
   addRequest(inputs){
+    let date = new Date(this.date);
+    let month = (date.getMonth() + 1).toString();
+    let year = date.getFullYear().toString();
     let loader=this.loader.create({
       content:'กำลังส่งคำขอ...'
     })
@@ -163,7 +166,7 @@ export class AddRequestPage {
     .then(result=>{
       console.log(result)
       console.log(this.date);
-      this.carRequestService.getCarRequest(this.user.id,this.date)
+      this.carRequestService.getCarRequestByMonth(this.user.id,month,year)
       .then(result=>{
           loader.dismiss();
          this.viewCtrl.dismiss(result);

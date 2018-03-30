@@ -59,10 +59,7 @@ export class CarRequestPage {
       this.authService.getUser()
         .then(result => {
           this.user = result
-          return this.carRequestService.getCarRequest(this.user.id,this.date)
-            .then(result => {
-              this.allRequests = result.data
-            }).catch(err => { console.log(err) })
+          return this.getCarRequest()
         }),
       /* Get All Employee */
       this.employeeService.getAllEmployeeWithOutPage()
@@ -88,8 +85,11 @@ export class CarRequestPage {
   /* Get Car Request */
   getCarRequest(): Promise<any> {
     console.log(this.date)
+    let date = new Date(this.date);
+    let month = (date.getMonth() + 1).toString();
+    let year = date.getFullYear().toString();
     return new Promise((resolve, reject) => {
-      this.carRequestService.getCarRequest(this.user.id,this.date)
+      this.carRequestService.getCarRequestByMonth(this.user.id,month,year)
         .then(result => {
           this.allRequests = result.data;
           resolve(result);

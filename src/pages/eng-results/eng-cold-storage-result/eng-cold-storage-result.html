@@ -50,6 +50,12 @@
           <ion-grid *ngIf="daily_used.cs1_max!=0&&daily_used.cs2_max!=0">
             <!-- Room 1 -->
             <ion-row class="c-result">
+              <ion-col col-12>
+                <div>
+                  <h2 text-center ion-text color="dark">รายงานประจำวันที่ {{selectedDate | date:'dd/MM/yyyy'}}</h2>
+                  <div class="c-result-dark" ion-text text-right></div>
+                </div>
+              </ion-col>
               <!-- Cs1 Max Temp -->
               <ion-col col-12>
                 <div>

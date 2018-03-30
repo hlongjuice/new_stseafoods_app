@@ -161,6 +161,7 @@ export class CarResponsePage {
 
   /* Show Response Details */
   showResponseDetails(response) {
+    console.log('Show Response Details Response :',response)
     let modal = this.modalCtrl.create('ResponseDetailsPage',
       {
         'response': response,

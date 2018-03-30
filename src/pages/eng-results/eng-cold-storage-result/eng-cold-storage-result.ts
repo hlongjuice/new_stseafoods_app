@@ -23,6 +23,7 @@ export class EngColdStorageResultPage {
   _alert: any;
   _toast: any;
 
+  selectedDate:any;
   date: any;
   month: any;
   year: any;
@@ -44,6 +45,7 @@ export class EngColdStorageResultPage {
   }
 
   ngOnInit() {
+    this.engSegment='table';
     this.daily_used = [];
     this.time_records = [];
     for (let i = 1; i <= 24; i++) {
@@ -78,6 +80,7 @@ export class EngColdStorageResultPage {
         console.log(result)
         this.recorders = result.data;
         this.daily_used = result;
+        this.selectedDate=this.date;
         this.showSegment();
         this.dismissLoader()
       }).catch(err => {

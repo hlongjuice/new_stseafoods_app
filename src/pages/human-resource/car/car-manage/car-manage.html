@@ -12,7 +12,7 @@
     <ion-title text-center>
       <!--<ion-item>-->
       <ion-icon item-start><i class="fa fa-car" aria-hidden="true"></i></ion-icon>
-      การจัดการพนักงาน
+      การจัดการยานพาหนะ
       <!--</ion-item> -->
     </ion-title>
   </ion-navbar>
@@ -70,7 +70,7 @@
           </ion-col>
           <!--Edit-->
           <ion-col col-3>
-            <button margin-bottom ion-button color="warning">แก้ไข</button>
+            <button (click)="editCar(car)" margin-bottom ion-button color="warning">แก้ไข</button>
           </ion-col>
           <!-- Usage History-->
           <ion-col col-3>

@@ -48,8 +48,6 @@ export class AssignCarPage {
 
   ngOnInit() {
     this.passengers=[];
-    this.approveDate = this.dateService.getDate();
-    this.approveTime = this.dateService.getTime().currentTime;
     this.selectedRequests = [];
     let request = null;
     this.selectedRequestIDs = this.navParams.data.selectedRequestIDs
@@ -66,10 +64,13 @@ export class AssignCarPage {
     this.drivers = this.navParams.data.drivers;
     /* Get Selected Request */
     this.requests = this.navParams.data.selectedRequests
-    console.log(this.requests);
+    console.log('Selected Requests : ',this.requests);
+    // Data and Time
+    this.approveDate = this.requests[0].start_date;
+    this.approveTime = this.requests[0].start_time;
     /* Set Destination */
     this.destination = this.requests[0].destination;
-    this.details=this.requests[0].destination;
+    this.details=this.requests[0].details;
     this.requests.forEach(item=>{
       // let passenger
       this.passengers.push.apply(this.passengers,item.passenger)

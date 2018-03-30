@@ -86,7 +86,7 @@
       <!--Row 4-->
       <ion-row>
         <!--Employee-->
-        <ion-col col-6>
+        <ion-col *ngIf="rank" col-6>
           <ion-item>
             <ion-label (focus)="getRequestEmployees()" color="primary">ผู้ขอ</ion-label>
             <ion-input required text-right (focus)="getRequestEmployees()" [disabled]="!divisions" [(ngModel)]="requestEmployee" name="requestEmployee"></ion-input>

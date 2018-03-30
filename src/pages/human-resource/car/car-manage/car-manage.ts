@@ -58,6 +58,7 @@ export class CarManagePage {
       .then(
       result => {
         this.cars = result;
+        console.log('Result');
       }
       ).catch(err => { console.log(err) })
   }
@@ -66,13 +67,28 @@ export class CarManagePage {
   addCar(){
     let modal=this.modalCtrl.create('CarAddPage',{'carTypes':this.carTypes},{enableBackdropDismiss:false})
     modal.present();
-    modal.onDidDismiss(()=>{
-      this.getCar()
+    modal.onDidDismiss((result)=>{
+      if(result){
+        this.getCar()
+      }
+    });
+  }
+  //Edit Cat
+  editCar(car){
+    let modal=this.modalCtrl.create('CarEditPage',{
+      'car':car,
+      'carTypes':this.carTypes
+    },{enableBackdropDismiss:false})
+    modal.present();
+    modal.onDidDismiss((updated)=>{
+      if(updated){
+        this.getCar()
+      }
     });
   }
   /* Show Usage */
   showUsage(car){
-    this.navCtrl.push(this.carUsagePage,{'car':car});
+    this.navCtrl.push('CarUsagePage',{'car':car});
   }
 
 }

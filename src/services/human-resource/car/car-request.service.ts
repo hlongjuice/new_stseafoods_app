@@ -70,6 +70,25 @@ export class CarRequestService {
                 )
         });
     }
+    //Get Car Request By Month
+    getCarRequestByMonth(user_id,month,year):Promise<any>{
+        let inputs={
+            'month':month,
+            'year':year,
+            'user_id':user_id
+        }
+
+        let getCarUrl = this.url + '/api/human_resource/car/car_request/get_by_month';
+        return new Promise((resolve, reject) => {
+            this.http.post(getCarUrl,inputs, { headers: this.headers })
+                .subscribe(
+                result => {
+                    resolve(result.json())
+                },
+                err => { reject(err) }
+                )
+        });
+    }
 
     /*Add Car Request*/
     addCarRequest(start_date,start_time,end_date,end_time, car_type_id, division_id, em_id, rank_id, destination, details, user_id,passengers,passenger_number){

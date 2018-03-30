@@ -27,7 +27,7 @@
           <ion-col col-4>
             <button default ion-button (click)="addNewReceiving()">เพิ่มการบันทึก</button>
           </ion-col>
-          <ion-col offset-4 col-4>
+          <ion-col offset-3 col-5>
             <ion-item>
               <ion-label fixed>เลือกวันที่</ion-label>
               <ion-datetime class="date-input-large" displayFormat="DD/MM/YY" [(ngModel)]="date"></ion-datetime>
@@ -47,17 +47,18 @@
           <ion-label>แหล่งวัตถุดิบ</ion-label>
           <ion-label>บ่อ</ion-label>
           <ion-label>รหัสวัตถุดิบ</ion-label>
-          <button disabled item-content ion-button default clear>ผู้เกี่ยวข้อง/อื่นๆ</button>
+          <button disabled item-content ion-button default clear>ผู้เกี่ยวข้อง/เอกสาร</button>
           <button item-content ion-button default disabled clear>กุ้งนิ้ม / กุ้งตาย 5 รอบ</button>
-          <button disabled item-content default ion-button clear>แก้ไข</button>
-          <button disabled item-end default ion-button clear>ลบ</button>
+          <!-- <button disabled item-content default ion-button clear>แก้ไข</button> -->
+          <!-- <button disabled item-end default ion-button clear>ลบ</button> -->
         </ion-item>
         <!-- Table Content -->
         <ion-item *ngFor="let recorder of recorders">
           <button item-start default ion-button (click)="showRecorderList(recorder)">รายละเอียด</button>
           <!-- Date -->
           <ion-label>
-            <ion-datetime no-padding disabled displayFormat="DD/MM/YY" [(ngModel)]="recorder.date"></ion-datetime>
+            {{recorder.date | date:'dd/MM/yyyy'}}
+            <!-- <ion-datetime no-padding disabled displayFormat="DD/MM/YY" [(ngModel)]="recorder.date"></ion-datetime> -->
           </ion-label>
           <!-- Supplier -->
           <ion-label>{{recorder.supplier?.name}}</ion-label>
@@ -65,10 +66,18 @@
           <ion-label>{{recorder.pond}}</ion-label>
           <!-- Code -->
           <ion-label>{{recorder.code}}</ion-label>
-          <button item-content ion-button default color="primary" (click)="addChecker(recorder)">ผู้เกี่ยวข้อง/หมายเลขเอกสาร</button>
-          <button item-content ion-button default color="info" (click)="addExtraReceiving(recorder)">รายละเอียดเพิ่มเติม</button>
-          <button item-content ion-button default color="warning" (click)="editSupplierReceiving(recorder)">แก้ไข</button>
-          <button item-end ion-button default color="danger" (click)="deleteSupplierReceiving(recorder)">ลบ</button>
+          <!-- <button item-content ion-button default color="primary" (click)="addChecker(recorder)">ผู้เกี่ยวข้อง/อื่นๆ</button> -->
+          <!-- <button item-content ion-button default color="info" (click)="addExtraReceiving(recorder)">รายละเอียดเพิ่มเติม</button> -->
+          <div item-end>
+            <p>
+                <button ion-button default color="primary" (click)="addChecker(recorder)">ผู้เกี่ยวข้อง/เอกสาร</button>
+                <button ion-button default color="info" (click)="addExtraReceiving(recorder)">รายละเอียดเพิ่มเติม</button>
+            </p>
+            <p text-right>
+                <button  ion-button default color="warning" (click)="editSupplierReceiving(recorder)">แก้ไข</button>
+                <button ion-button default color="danger" (click)="deleteSupplierReceiving(recorder)">ลบ</button>
+             </p>
+          </div>
         </ion-item>
       </ion-list>
       <!-- <canvas #test width="400" height="400"></canvas> -->

@@ -99,7 +99,8 @@ export class QcRecorderListPage {
   sumRowWeight() {
     let i = 0;
     this.lists.reduce((sum, item) => {
-      this.lists[i].row_sum_weight = (sum + parseFloat(item.weight)).toFixed()
+      // this.lists[i].row_sum_weight = (sum + parseFloat(item.weight)).toFixed(2)
+      this.lists[i].row_sum_weight = (sum + parseFloat(item.weight))
       i++;
       return sum + parseFloat(item.weight)
     }, 0)

@@ -90,6 +90,7 @@ export class EngDefrostTimeAddPage {
       this._submit_status=true
       loader.dismiss();
       this.showToast('การบันทึกเสร็จสมบูรณ์')
+      this.viewCtrl.dismiss(this._submit_status);
     }).catch(err=>{
       console.log(err)
       loader.dismiss();

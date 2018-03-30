@@ -101,13 +101,14 @@ export class CarManageService {
     }
 
     /*Update Car*/
-    updateCar(car_number, car_type_id, plate_number, quantity): Promise<any> {
+    updateCar(car_id,car_number, car_type_id, plate_number): Promise<any> {
         let newDetials = {
+            'car_id':car_id,
             'car_number': car_number,//Required
             'car_type_id': car_type_id,//Required
             'plate_number': plate_number,//Required
-            'quantity': quantity
         }
+        console.log('Update Car Service Input : ',newDetials);
         let updateCarUrl = this.url + '/api/human_resource/car/manage/update';
         return new Promise((resolve, reject) => {
             this.http.post(updateCarUrl, newDetials, { headers: this.headers })

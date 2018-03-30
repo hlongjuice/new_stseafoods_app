@@ -24,6 +24,26 @@
 
     </ion-card-header>
     <ion-card-content>
+      <ion-segment (ionChange)="clearData()" [(ngModel)]="groupTab" name="groupTab">
+        <ion-segment-button value="monthly">รายเดือน</ion-segment-button>
+        <ion-segment-button value="yearly">รายปี</ion-segment-button>
+      </ion-segment>
+      <ion-grid>
+          <ion-row>
+              <ion-col col-4>
+                  <ion-item *ngIf="groupTab ==='monthly'">
+                      <div  ion-text item-start>เลือกเดือน</div>
+                      <ion-datetime  class="text-large" displayFormat="MM/YYYY" [(ngModel)]="date"></ion-datetime>
+                      <button item-end ion-button default (click)="getByMonth()">ค้นหา</button>
+                  </ion-item>
+                  <ion-item *ngIf="groupTab ==='yearly'">
+                      <div  ion-text item-start>เลือกปี</div>
+                      <ion-datetime  class="text-large" (ionChange)="getByYear()" displayFormat="YYYY" [(ngModel)]="date"></ion-datetime>
+                      <button item-end ion-button default (click)="getByYear()">ค้นหา</button>
+                  </ion-item>
+              </ion-col>
+            </ion-row>
+      </ion-grid>
       <ion-list no-padding inset>
         <ion-item no-padding class="table-header">
           <ion-label>ว/ด/ป</ion-label>
@@ -53,23 +73,23 @@
             <ion-datetime no-padding disabled displayFormat="DD/MM/YYYY" [(ngModel)]="carUsage.date_arrival"></ion-datetime>
           </ion-label>
           <ion-label item-content>{{carUsage.distance}}</ion-label>
-          <ion-label item-content>{{carUsage.gas_unit_price}}</ion-label>
-          <ion-label item-content>{{carUsage.gas_fill}}</ion-label>
-          <ion-label item-content>{{carUsage.gas_total_price}}</ion-label>
-          <ion-label item-content>{{carUsage.distance_per_litre}}</ion-label>
-          <ion-label item-content>{{carUsage.price_per_distance}}</ion-label>
+          <ion-label item-content>{{carUsage.gas_unit_price |number:'1.2-2'}}</ion-label>
+          <ion-label item-content>{{carUsage.gas_fill |number:'1.2-2'}}</ion-label>
+          <ion-label item-content>{{carUsage.gas_total_price |number:'1.2-2'}}</ion-label>
+          <ion-label item-content>{{carUsage.distance_per_litre |number:'1.2-2'}}</ion-label>
+          <ion-label item-content>{{carUsage.price_per_distance |number:'1.2-2'}}</ion-label>
           <button item-end ion-button (click)="moreDetails(carUsage,$event)">เพิ่มเติม</button>
         </ion-item>
         <!-- Result -->
         <ion-item color="success" no-padding>
           <ion-label>รวม</ion-label>
           <ion-label item-content>{{totalUsage?.distance}}</ion-label>
-           <ion-label item-content>{{totalUsage?.gas_unit_price}}</ion-label>  
-           <ion-label item-content>{{totalUsage?.gas_fill}}</ion-label> 
-           <ion-label item-content>{{totalUsage?.gas_total_price}}</ion-label> 
-           <ion-label item-content>{{totalUsage?.distance_per_litre}}</ion-label> 
-           <ion-label item-content>{{totalUsage?.price_per_distance}}</ion-label> 
-           <button disabled ion-button outline item-end>เพิ่มเติม</button>
+          <ion-label item-content>{{totalUsage?.gas_unit_price |number:'1.2-2'}}</ion-label>
+          <ion-label item-content>{{totalUsage?.gas_fill |number:'1.2-2'}}</ion-label>
+          <ion-label item-content>{{totalUsage?.gas_total_price |number:'1.2-2'}}</ion-label>
+          <ion-label item-content>{{totalUsage?.distance_per_litre |number:'1.2-2'}}</ion-label>
+          <ion-label item-content>{{totalUsage?.price_per_distance |number:'1.2-2'}}</ion-label>
+          <button disabled ion-button outline item-end>เพิ่มเติม</button>
         </ion-item>
       </ion-list>
     </ion-card-content>

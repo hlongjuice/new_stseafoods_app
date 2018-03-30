@@ -41,8 +41,9 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col *ngIf="selectedStatus=='1'" col-4>
+          <ion-col *ngIf="selectedStatus=='1'" col-6>
             <button [disabled]="chkItems.length==0" (click)="assignCar()" ion-button color="warning">จัดรถ</button>
+            <div ion-text color="gray">**ค่าเริ่มต้นการจัดรถจะอิงข้อมูลจากรายการแรกที่เลือก</div>
           </ion-col>
           <!-- <ion-col col-4> -->
           <!-- <button [disabled]="chkItems.length==0" (click)="approveRequest()" ion-button color="primary">อนุมัติการขอ</button> -->
@@ -87,6 +88,7 @@
             <!--Date-->
             <ion-col col-2>
               <ion-datetime disabled displayFormat="DD / MM / YYYY" [(ngModel)]="request.start_date"></ion-datetime>
+              <p ion-text text-center padding-bottom>{{request.start_time | slice:0:5}}</p>
             </ion-col>
             <!--Destination-->
             <ion-col col-2>

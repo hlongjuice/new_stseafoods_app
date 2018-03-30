@@ -11,7 +11,9 @@
     </button>
     <ion-title text-center>
       <!--<ion-item>-->
-      <ion-icon item-start><i class="fa fa-exchange" aria-hidden="true"></i></ion-icon>
+      <ion-icon item-start>
+        <i class="fa fa-exchange" aria-hidden="true"></i>
+      </ion-icon>
       ระบบบันทึกรถเข้า-ออก
       <!--</ion-item> -->
     </ion-title>
@@ -25,58 +27,48 @@
       <ion-segment (ionChange)="getCarItems()" [(ngModel)]="selectedStatus">
         <ion-segment-button value='1'>รถขาออก</ion-segment-button>
         <ion-segment-button value='2'>รถขาเข้า</ion-segment-button>
-         <ion-segment-button value='3'>ประวัติการบันทึก</ion-segment-button> 
+        <ion-segment-button value='3'>ประวัติการบันทึก</ion-segment-button>
       </ion-segment>
     </ion-card-header>
     <ion-card-content>
       <ion-grid>
-        <!-- Table Header -->
-        <ion-row class="table-header">
-          <ion-col col-12>
-              <ion-searchbar (ionInput)="searchCars($event)"></ion-searchbar>
-          </ion-col>
-          <!-- Driver Name -->
-          <ion-col col-3>
-            <ion-item>คนขับรถ</ion-item>
-          </ion-col>
-          <ion-col col-2>
-            <ion-item>ป้ายทะเบียน</ion-item>
-          </ion-col>
-          <ion-col col-3>
-            <ion-item>สถานที่ติดต่อ</ion-item>
-          </ion-col>
-          <ion-col col-4></ion-col>
-          <div class="table-header-line"></div>
-        </ion-row>
-        <!-- Table Content -->
-        <ion-row class="table-content" *ngFor="let car of cars">
-          <!-- Driver Name -->
-          <ion-col col-3>
-            <ion-item>
-              {{car.driver?.name}} {{car.driver?.lastname}}
-            </ion-item>
-          </ion-col>
-          <!-- Plate Number -->
-          <ion-col col-2>
-            <ion-item>{{car.car?.plate_number}}</ion-item>
-          </ion-col>
-          <ion-col col-3>
-            <ion-item>{{car?.destination}}</ion-item>
-          </ion-col>
-          <ion-col col-4>
-            <ion-item>
-                <button margin-right *ngIf="selectedStatus!=1" (click)="cancelStatus(car)" margin-bottom ion-button color="danger" default>ยกเลิกสถานะ</button>
-                <!-- Departure Button -->
-                <button margin-bottom *ngIf="selectedStatus==1" (click)="submitDeparture(car)" ion-button color="primary" default>บันทึกการใช้</button>
-                <!-- Arrival Button  -->
-                <button margin-bottom *ngIf="selectedStatus==2" (click)="editCarDeparture(car)" ion-button color="warning" default>แก้ไขขาออก</button>
-                <button margin-bottom *ngIf="selectedStatus==2" (click)="submitArrival(car)" ion-button color="primary" default>บันทึกรถขาเข้า</button>
-                <button margin-bottom *ngIf="selectedStatus==3" (click)="editCarAccess(car)" ion-button color="warning" default>แก้ไขข้อมูล</button>
-            </ion-item>
-          </ion-col>
-          <div class="table-content-line"></div>
-        </ion-row>
+          <ion-row>
+              <ion-col col-4>
+                  <ion-item>
+                      <div  ion-text item-start>เลือกวันที่</div>
+                      <ion-datetime class="text-large" (ionChange)="getCarItems()" displayFormat="DD/MM/YYYY" [(ngModel)]="date"></ion-datetime>
+                  </ion-item>
+              </ion-col>
+            </ion-row>
       </ion-grid>
+
+      <ion-list inset>
+       
+        <ion-item text-center class="table-header">
+          <ion-label>คนขับรถ</ion-label>
+          <ion-label>ป้ายทะเบียน</ion-label>
+          <ion-label>สถานที่ติดต่อ</ion-label>
+          <button item-content *ngIf="selectedStatus!=1" default clear disabled ion-button color="danger" default>ยกเลิกสถานะ</button>
+          <!-- Departure Button -->
+          <button item-content *ngIf="selectedStatus==1" default clear disabled ion-button color="primary" default>บันทึกการใช้</button>
+          <!-- Arrival Button  -->
+          <button item-content *ngIf="selectedStatus==2" default clear disabled ion-button color="warning" default>แก้ไขขาออก</button>
+          <button item-content *ngIf="selectedStatus==2" default clear disabled ion-button color="primary" default>บันทึกรถขาเข้า</button>
+          <button item-content *ngIf="selectedStatus==3" default clear disabled ion-button color="warning" default>แก้ไขข้อมูล</button>
+        </ion-item>
+        <ion-item text-center class="table-content" *ngFor="let car of cars">
+          <ion-label> {{car.driver?.name}} {{car.driver?.lastname}}</ion-label>
+          <ion-label>{{car.car?.plate_number}}</ion-label>
+          <ion-label text-wrap>{{car?.destination}}</ion-label>
+          <button item-content *ngIf="selectedStatus!=1" (click)="cancelStatus(car)" ion-button color="danger" default>ยกเลิกสถานะ</button>
+          <!-- Departure Button -->
+          <button item-content *ngIf="selectedStatus==1" (click)="submitDeparture(car)" ion-button color="primary" default>บันทึกการใช้</button>
+          <!-- Arrival Button  -->
+          <button item-content *ngIf="selectedStatus==2" (click)="editCarDeparture(car)" ion-button color="warning" default>แก้ไขขาออก</button>
+          <button item-content *ngIf="selectedStatus==2" (click)="submitArrival(car)" ion-button color="primary" default>บันทึกรถขาเข้า</button>
+          <button item-content *ngIf="selectedStatus==3" (click)="editCarAccess(car)" ion-button color="warning" default>แก้ไขข้อมูล</button>
+        </ion-item>
+      </ion-list>
     </ion-card-content>
   </ion-card>
 </ion-content>

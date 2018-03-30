@@ -11,7 +11,9 @@
     </button>
     <ion-title text-center>
       <!--<ion-item>-->
-      <ion-icon item-start><i class="fa fa-file-text-o" aria-hidden="true"></i></ion-icon>
+      <ion-icon item-start>
+        <i class="fa fa-file-text-o" aria-hidden="true"></i>
+      </ion-icon>
       ระบบขอใช้รถ
       <!--</ion-item> -->
     </ion-title>
@@ -32,8 +34,8 @@
         </ion-row>
         <ion-row>
           <ion-col col-4>
-            <div ion-text>เลือกวันที่</div>
-            <ion-datetime (ionChange)="getCarRequest()" displayFormat="DD/MM/YYYY" [(ngModel)]="date"></ion-datetime>
+            <div ion-text>เลือกเดือน</div>
+            <ion-datetime (ionChange)="getCarRequest()" displayFormat="MM/YYYY" [(ngModel)]="date"></ion-datetime>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -60,7 +62,7 @@
             <ion-item>สถานะการขอ</ion-item>
           </ion-col>
           <ion-col col-2>
-            <ion-item></ion-item>
+            <ion-item>วันที่อนุมัติ</ion-item>
           </ion-col>
           <div class="table-header-line"></div>
         </ion-row>
@@ -79,17 +81,25 @@
             <ion-datetime disabled displayFormat="DD / MM / YYYY" [(ngModel)]="request.start_date"></ion-datetime>
           </ion-col>
           <ion-col col-2>
-            <ion-item>{{request.start_time}}</ion-item>
+            <ion-item>{{request.start_time | slice:0:5}}</ion-item>
           </ion-col>
           <ion-col col-2>
             <ion-item>{{request.destination}}</ion-item>
           </ion-col>
           <ion-col col-2>
             <ion-item>
-              <ion-label [color]="request.status?.color">{{request.status?.name}}</ion-label>
+              <ion-label [color]="request.status?.color">{{request.status?.name}}
+              </ion-label>
             </ion-item>
           </ion-col>
           <ion-col col-2>
+            <ion-item *ngIf="request?.status_id==3">
+              <ion-label text-wrap>
+                {{request.car_response[0]?.date |date: 'dd/MM/yyyy'}}
+                <p ion-text>เวลา</p>
+                {{request.car_response[0]?.time | slice:0:5}}
+              </ion-label>
+            </ion-item>
             <button margin-bottom *ngIf="request?.status_id==1" (click)="editRequest(request)" ion-button color="warning">แก้ไข</button>
             <button margin-bottom *ngIf="request.status.id==1" (click)="singleDelete(request.id,i)" ion-button color="danger">ลบ</button>
           </ion-col>
